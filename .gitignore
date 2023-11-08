@@ -1,0 +1,18 @@
+
+### Intellij ###
+**/.idea/*
+**/project/*
+**/target/*
+
+### Scala ###
+*.class
+*.log
+*.metals
+
+data/*
+models/*
+
+
+
+**/quick_start_resources/data/*
+**/quick_start_resources/models/*

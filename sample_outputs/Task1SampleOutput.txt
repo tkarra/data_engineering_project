@@ -1,0 +1,157 @@
+
+Output of Task1 for a run on the whole dataset :
+
+**********************************************************************************************************
+
+TASK1 - Discovering the NYC Yellow Taxi Trip Records Dataset - September 2019 :
+-------------------------------------------------------------------------------
+
+
+Loading the Trips file into a Spark Dataframe ...
+
+Dataframe Schema :
+root
+ |-- VendorID: integer (nullable = true)
+ |-- tpep_pickup_datetime: timestamp (nullable = true)
+ |-- tpep_dropoff_datetime: timestamp (nullable = true)
+ |-- passenger_count: integer (nullable = true)
+ |-- trip_distance: double (nullable = true)
+ |-- RatecodeID: integer (nullable = true)
+ |-- store_and_fwd_flag: string (nullable = true)
+ |-- PULocationID: integer (nullable = true)
+ |-- DOLocationID: integer (nullable = true)
+ |-- payment_type: integer (nullable = true)
+ |-- fare_amount: double (nullable = true)
+ |-- extra: double (nullable = true)
+ |-- mta_tax: double (nullable = true)
+ |-- tip_amount: double (nullable = true)
+ |-- tolls_amount: double (nullable = true)
+ |-- improvement_surcharge: double (nullable = true)
+ |-- total_amount: double (nullable = true)
+ |-- congestion_surcharge: double (nullable = true)
+
+
+Show sample 10 rows :
++--------+--------------------+---------------------+---------------+-------------+----------+------------------+------------+------------+------------+-----------+-----+-------+----------+------------+---------------------+------------+--------------------+
+|VendorID|tpep_pickup_datetime|tpep_dropoff_datetime|passenger_count|trip_distance|RatecodeID|store_and_fwd_flag|PULocationID|DOLocationID|payment_type|fare_amount|extra|mta_tax|tip_amount|tolls_amount|improvement_surcharge|total_amount|congestion_surcharge|
++--------+--------------------+---------------------+---------------+-------------+----------+------------------+------------+------------+------------+-----------+-----+-------+----------+------------+---------------------+------------+--------------------+
+|1       |2019-09-01 00:06:48 |2019-09-01 00:25:46  |1              |2.0          |1         |N                 |186         |161         |2           |13.0       |3.0  |0.5    |0.0       |0.0         |0.3                  |16.8        |2.5                 |
+|1       |2019-09-01 00:29:17 |2019-09-01 00:57:54  |1              |5.5          |1         |N                 |161         |256         |2           |22.5       |3.0  |0.5    |0.0       |0.0         |0.3                  |26.3        |2.5                 |
+|1       |2019-09-01 00:41:32 |2019-09-01 00:41:36  |1              |2.9          |1         |N                 |145         |145         |2           |2.5        |0.5  |0.5    |0.0       |0.0         |0.3                  |3.8         |0.0                 |
+|1       |2019-09-01 00:59:11 |2019-09-01 00:59:15  |1              |0.0          |1         |N                 |145         |145         |2           |2.5        |0.5  |0.5    |0.0       |0.0         |0.3                  |3.8         |0.0                 |
+|1       |2019-09-01 00:39:41 |2019-09-01 00:45:06  |1              |1.5          |1         |N                 |95          |93          |2           |7.0        |0.5  |0.5    |0.0       |0.0         |0.3                  |8.3         |0.0                 |
+|1       |2019-09-01 00:00:08 |2019-09-01 00:36:43  |2              |8.3          |1         |N                 |161         |232         |1           |29.5       |3.0  |0.5    |6.66      |0.0         |0.3                  |39.96       |2.5                 |
+|2       |2019-08-31 17:22:41 |2019-08-31 17:30:04  |1              |1.3          |1         |N                 |163         |186         |1           |7.0        |0.5  |0.5    |2.0       |0.0         |0.3                  |12.8        |2.5                 |
+|2       |2019-09-01 00:17:23 |2019-09-01 00:27:45  |1              |1.2          |1         |N                 |137         |186         |1           |8.0        |0.5  |0.5    |2.36      |0.0         |0.3                  |14.16       |2.5                 |
+|2       |2019-09-01 00:36:12 |2019-09-01 01:14:56  |1              |11.17        |1         |N                 |48          |89          |1           |36.0       |0.5  |0.5    |7.96      |0.0         |0.3                  |47.76       |2.5                 |
+|2       |2019-09-01 00:10:45 |2019-09-01 00:30:52  |1              |5.81         |1         |N                 |24          |107         |1           |19.5       |0.5  |0.5    |4.66      |0.0         |0.3                  |27.96       |2.5                 |
++--------+--------------------+---------------------+---------------+-------------+----------+------------------+------------+------------+------------+-----------+-----+-------+----------+------------+---------------------+------------+--------------------+
+only showing top 10 rows
+
+
+Main Metrics (count, mean, standard deviation, min, max) :
++-------+------------------+-----------------+------------------+------------------+------------------+-------------------+-----------------+-------------------+---------------------+
+|summary|   passenger_count|    trip_distance|      total_amount|       fare_amount|             extra|            mta_tax|       tip_amount|       tolls_amount|improvement_surcharge|
++-------+------------------+-----------------+------------------+------------------+------------------+-------------------+-----------------+-------------------+---------------------+
+|  count|           6533699|          6567788|           6567788|           6567788|           6567788|            6567788|          6567788|            6567788|              6567788|
+|   mean|1.5494071581809936|3.086974002510359|19.918379241450538|13.812060072583549| 1.150874027907116|0.49371317862269615|2.277879627051895|0.40846524278775637|  0.29834830234378473|
+| stddev| 1.192189713480958|4.036778537842611| 61.19251757430358| 60.52940842927964|1.2722484488600447|0.06597863478150788|2.937931631386095|  1.853548950165783| 0.030410454314874803|
+|    min|                 0|              0.0|            -530.8|            -530.0|              -7.5|               -0.5|           -80.08|              -40.0|                 -0.3|
+|    max|                 9|            603.5|         151007.81|         150998.39|              32.5|              15.55|            496.2|             900.09|                  1.0|
++-------+------------------+-----------------+------------------+------------------+------------------+-------------------+-----------------+-------------------+---------------------+
+
+
+Show sample 5 NULL values if any :
++--------+--------------------+---------------------+---------------+-------------+----------+------------------+------------+------------+------------+-----------+-----+-------+----------+------------+---------------------+------------+--------------------+
+|VendorID|tpep_pickup_datetime|tpep_dropoff_datetime|passenger_count|trip_distance|RatecodeID|store_and_fwd_flag|PULocationID|DOLocationID|payment_type|fare_amount|extra|mta_tax|tip_amount|tolls_amount|improvement_surcharge|total_amount|congestion_surcharge|
++--------+--------------------+---------------------+---------------+-------------+----------+------------------+------------+------------+------------+-----------+-----+-------+----------+------------+---------------------+------------+--------------------+
+|null    |2019-09-01 07:51:00 |2019-09-01 08:12:00  |null           |4.7          |null      |null              |133         |61          |null        |24.13      |2.75 |0.5    |0.0       |0.0         |0.3                  |27.68       |0.0                 |
+|null    |2019-09-01 07:06:00 |2019-09-01 07:23:00  |null           |3.97         |null      |null              |3           |169         |null        |22.93      |2.75 |0.5    |0.0       |0.0         |0.3                  |26.48       |0.0                 |
+|null    |2019-09-01 07:07:00 |2019-09-01 07:31:00  |null           |14.48        |null      |null              |241         |79          |null        |45.5       |2.75 |0.5    |0.0       |0.0         |0.3                  |49.05       |0.0                 |
+|null    |2019-09-01 07:26:00 |2019-09-01 07:49:00  |null           |10.07        |null      |null              |257         |48          |null        |33.61      |2.75 |0.5    |0.0       |6.12        |0.3                  |43.28       |0.0                 |
+|null    |2019-09-01 07:31:00 |2019-09-01 07:53:00  |null           |3.81         |null      |null              |62          |26          |null        |24.13      |2.75 |0.5    |0.0       |0.0         |0.3                  |27.68       |0.0                 |
++--------+--------------------+---------------------+---------------+-------------+----------+------------------+------------+------------+------------+-----------+-----+-------+----------+------------+---------------------+------------+--------------------+
+only showing top 5 rows
+
+
+Compute Custom Metrics :
++---------------------+--------------------------------+
+|Total Amount Paid ($)|Total Distance Travelled (miles)|
++---------------------+--------------------------------+
+|1.3081969216E8       |2.027459081E7                   |
++---------------------+--------------------------------+
+
+
+Estimated Average Nb Of Passengers per trip:
+(zero values for "passenger_count" are discarded when computing the average, as the taxi driver didn't fill this number)
++----------------------------------+
+|Estimated Average Nb Of Passengers|
++----------------------------------+
+|1.58                              |
++----------------------------------+
+
+
+Top 10 Pick-Up Locations (most frequent):
++------------+------+----------------------------+---------+
+|PULocationID|count |Zone                        |Borough  |
++------------+------+----------------------------+---------+
+|237         |284765|Upper East Side South       |Manhattan|
+|236         |260570|Upper East Side North       |Manhattan|
+|161         |244226|Midtown Center              |Manhattan|
+|186         |241464|Penn Station/Madison Sq West|Manhattan|
+|132         |241462|JFK Airport                 |Queens   |
+|162         |227037|Midtown East                |Manhattan|
+|230         |218492|Times Sq/Theatre District   |Manhattan|
+|48          |205625|Clinton East                |Manhattan|
+|170         |199895|Murray Hill                 |Manhattan|
+|234         |197935|Union Sq                    |Manhattan|
++------------+------+----------------------------+---------+
+
+
+Top 10 Drop-Off Locations (most frequent):
++------------+------+----------------------------+---------+
+|DOLocationID|count |Zone                        |Borough  |
++------------+------+----------------------------+---------+
+|236         |272784|Upper East Side North       |Manhattan|
+|237         |257288|Upper East Side South       |Manhattan|
+|161         |231114|Midtown Center              |Manhattan|
+|170         |205629|Murray Hill                 |Manhattan|
+|230         |196686|Times Sq/Theatre District   |Manhattan|
+|162         |187917|Midtown East                |Manhattan|
+|48          |182779|Clinton East                |Manhattan|
+|142         |174621|Lincoln Square East         |Manhattan|
+|186         |171705|Penn Station/Madison Sq West|Manhattan|
+|234         |171166|Union Sq                    |Manhattan|
++------------+------+----------------------------+---------+
+
+
+Top 10 Paths :
++------------+------------+-----+---------------------+----------+---------------------+----------+
+|PULocationID|DOLocationID|count|PU Zone              |PU Borough|DO Zone              |DO Borough|
++------------+------------+-----+---------------------+----------+---------------------+----------+
+|237         |236         |44949|Upper East Side South|Manhattan |Upper East Side North|Manhattan |
+|236         |237         |38313|Upper East Side North|Manhattan |Upper East Side South|Manhattan |
+|236         |236         |35566|Upper East Side North|Manhattan |Upper East Side North|Manhattan |
+|264         |264         |35044|NV                   |Unknown   |NV                   |Unknown   |
+|237         |237         |34722|Upper East Side South|Manhattan |Upper East Side South|Manhattan |
+|239         |238         |18033|Upper West Side South|Manhattan |Upper West Side North|Manhattan |
+|239         |142         |17702|Upper West Side South|Manhattan |Lincoln Square East  |Manhattan |
+|237         |162         |17595|Upper East Side South|Manhattan |Midtown East         |Manhattan |
+|238         |239         |16307|Upper West Side North|Manhattan |Upper West Side South|Manhattan |
+|142         |239         |16154|Lincoln Square East  |Manhattan |Upper West Side South|Manhattan |
++------------+------------+-----+---------------------+----------+---------------------+----------+
+
+
+Metrics about Paths (count, mean, standard deviation, min, max) :
+(useful for partitioning tuning)
++-------+-----------------+------------------+------------------+
+|summary|PULocationID     |DOLocationID      |count             |
++-------+-----------------+------------------+------------------+
+|count  |32016            |32016             |32016             |
+|mean   |139.0858008495752|136.23432033983008|205.14080459770116|
+|stddev |75.8295225237534 |76.50028997357627 |1034.4516121354036|
+|min    |1                |1                 |1                 |
+|max    |265              |265               |44949             |
++-------+-----------------+------------------+------------------+
+
+
